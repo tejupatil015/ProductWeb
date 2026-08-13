@@ -1,1 +1,1 @@
-view:https://tejupatil015.github.io/ProductWeb/
+https://tejupatil015.github.io/ProductWeb/
