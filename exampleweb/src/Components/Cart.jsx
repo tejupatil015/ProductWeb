@@ -1,72 +1,157 @@
 import React from "react";
-import Jacket from "./../assets/leather-jacket.png";
 import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 
-const Cart = ({ handel , closePanel}) => {
+const Cart = ({
+    handel,
+    closePanel,
+    cart,
+    removeproduct,
+    quantityincrement,
+    quantitydecrement,
+    setOrderSummary
+}) => {
 
     if (handel !== "cart") return null;
+
     return (
         <section className="cart-overlay">
             <div className="cart-panel">
-
+                {/* Header */}
                 <div className="cart-header">
-                    <h1 className="cart-heading">Your Cart</h1>
-                    <span className="cart-count">1 Item</span>
+                    <h1 className="cart-heading">
+                        Your Cart
+                    </h1>
+                    <span className="cart-count">
+                        {cart.length} Items
+                    </span>
                 </div>
 
-                <div className="cart-item">
+                {/* Cart Items */}
+                <div className="cart-items">
 
-                    <div className="cart-image">
-                        <img src={Jacket} alt="Leather Jacket" />
-                    </div>
+                    {cart.length === 0 ? (
 
-                    <div className="cart-info">
-                        <h3>Leather Jacket</h3>
-                        <p>₹1,499</p>
+                        <p>Your cart is empty</p>
 
-                        <div className="quantity-box">
-                            <button>
-                                <FaMinus />
-                            </button>
+                    ) : (
 
-                            <span>1</span>
+                        cart.map((product) => (
 
-                            <button>
-                                <FaPlus />
-                            </button>
-                        </div>
-                    </div>
+                            <div
+                                className="cart-item"
+                                key={product.id}
+                            >
+                                {/* Image */}
+                                <div className="cart-image">
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                    />
+                                </div>
+                                {/* Product Info */}
+                                <div className="cart-info">
 
-                    <button className="cart-delete">
-                        <FaTrash />
-                    </button>
+                                    <h3>
+                                        {product.name}
+                                    </h3>
 
+                                    <p>
+                                        ₹{product.price}
+                                    </p>
+                                    {/* Quantity */}
+                                    <div className="quantity-box">
+
+                                        <button
+                                            onClick={() =>
+                                                quantitydecrement(product)
+                                            }
+                                        >
+                                            <FaMinus />
+                                        </button>
+                                        <span>
+                                            {product.quantity}
+                                        </span>
+                                        <button
+                                            onClick={() =>
+                                                quantityincrement(product)
+                                            }
+                                        >
+                                            <FaPlus />
+                                        </button>
+                                    </div>
+
+                                </div>
+                                {/* Delete */}
+                                <button
+                                    className="cart-delete"
+                                    onClick={() =>
+                                        removeproduct(product)
+                                    }
+                                >
+                                    <FaTrash />
+                                </button>
+                            </div>
+                        ))
+                    )}
                 </div>
-
+                {/* Summary */}
                 <div className="cart-summary">
-
                     <div>
                         <span>Subtotal</span>
-                        <span>₹1,499</span>
+                        <span>
+                            ₹
+                            {cart.reduce(
+                                (total, item) =>
+                                    total +
+                                    item.price * item.quantity,
+                                0
+                            )}
+                        </span>
                     </div>
-
                     <div>
-                        <span>Shipping & Handling</span>
-                        <span>₹100</span>
-                    </div>
+                        <span>
+                            Shipping & Handling
+                        </span>
 
+                        <span>
+                            {cart.length > 0 ? "₹100" : "$0"}
+                        </span>
+                    </div>
                     <div className="cart-total">
-                        <span>Order Total</span>
-                        <span>₹1,599</span>
+                        <span>
+                            Order Total
+                        </span>
+                        <span>
+                            ₹
+                            {cart.reduce(
+                                (total, item) =>
+                                    total +
+                                    item.price * item.quantity,
+                                0
+                            ) + (cart.length > 0 ? 100 : 0)}
+                        </span>
                     </div>
-
                 </div>
-
+                {/* Actions */}
                 <div className="cart-actions">
-                    <button className="cart-close" onClick={closePanel}>Close</button>
-                    <button className="checkout-btn">Checkout</button>
-                </div>
 
+                    <button
+                        className="cart-close"
+                        onClick={closePanel}
+                    >
+                        Close
+                    </button>
+                    <button
+                        className="checkout-btn"
+                        disabled={cart.length === 0}
+                        onClick={() => {
+                            setOrderSummary(true)
+                            closePanel()
+                        }}
+                    >
+                        Checkout
+                    </button>
+                </div>
             </div>
         </section>
     );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import products from "./../data/Product";
 import { FaHeart, FaShoppingBag } from "react-icons/fa";
 
-const ProductList = ({ search }) => {
+const ProductList = ({ search, addToCart, addTowish }) => {
   const categories = ["All", "Mens", "Womens", "Onsale", "NewArrival", "Kids"];
 
   const [activeTab, setActiveTab] = useState("All");
@@ -65,13 +65,13 @@ const ProductList = ({ search }) => {
                       <span className="new-badge">NEW</span>
                     )}
 
-                    <button className="wishlist">
+                    <button className="wishlist" onClick={() => addTowish(product)}>
                       <FaHeart />
                     </button>
 
                     <img src={product.image} alt={product.name} />
 
-                    <button className="quick-cart">
+                    <button className="quick-cart" onClick={() => addToCart(product)}>
                       <FaShoppingBag />
                       Add to Cart
                     </button>
@@ -85,11 +85,11 @@ const ProductList = ({ search }) => {
                     <div className="price">
 
                       <span className="current-price">
-                        ₹{product.price}
+                        ${product.price}
                       </span>
 
                       <span className="old-price">
-                        ₹{product.oldPrice}
+                        ${product.oldPrice}
                       </span>
 
                     </div>
@@ -99,7 +99,7 @@ const ProductList = ({ search }) => {
                 </div>
               );
             }))
-          }
+        }
 
 
       </div>
